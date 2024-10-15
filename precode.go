@@ -1,13 +1,14 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 )
 
-// Task ...
+// Task представляет структуру задачи
 type Task struct {
 	ID           string   `json:"id"`
 	Description  string   `json:"description"`
@@ -15,6 +16,7 @@ type Task struct {
 	Applications []string `json:"applications"`
 }
 
+// tasks представляет временное хранилище задач
 var tasks = map[string]Task{
 	"1": {
 		ID:          "1",
@@ -39,17 +41,15 @@ var tasks = map[string]Task{
 	},
 }
 
-// Ниже напишите обработчики для каждого эндпоинта
-// ...
-
-func main() {
-	r := chi.NewRouter()
-
-	// здесь регистрируйте ваши обработчики
-	// ...
-
-	if err := http.ListenAndServe(":8080", r); err != nil {
-		fmt.Printf("Ошибка при запуске сервера: %s", err.Error())
-		return
-	}
+// getAllTasks возвращает все задачи
+func getAllTasks(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(tasks)
 }
+
+// createTask добавляет новую задачу в список
+func createTask(w http.ResponseWriter, r *http.Request) {
+	var task Task
+	if err := json.New
+
